@@ -17,7 +17,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "I can predict the movement of stocks based on Technical Chart Data "
         "(RSI, MACD) and Recent News Sentiment (FinBERT).\n\n"
         "Try sending me: `/analyze <TICKER>`\n"
-        "Example: `/analyze AAPL`"
+        "Example: `/analyze RELIANCE`"
     )
     await update.message.reply_text(welcome_text, parse_mode='Markdown')
 
@@ -35,7 +35,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def analyze_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Analyze the given ticker symbol."""
     if not context.args:
-        await update.message.reply_text("Please provide a ticker symbol. Example: `/analyze AAPL`", parse_mode='Markdown')
+        await update.message.reply_text("Please provide a ticker symbol. Example: `/analyze RELIANCE`", parse_mode='Markdown')
         return
 
     ticker = context.args[0].upper()
@@ -112,7 +112,7 @@ async def portfolio_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def add_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Add a holding to the portfolio."""
     if len(context.args) != 3:
-        await update.message.reply_text("Usage: `/add <TICKER> <QTY> <PRICE>`\nExample: `/add AAPL 10 150.50`", parse_mode='Markdown')
+        await update.message.reply_text("Usage: `/add <TICKER> <QTY> <PRICE>`\nExample: `/add RELIANCE 10 2500.50`", parse_mode='Markdown')
         return
 
     ticker = context.args[0]
@@ -129,7 +129,7 @@ async def add_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def remove_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Remove a holding from the portfolio."""
     if not context.args:
-        await update.message.reply_text("Usage: `/remove <TICKER>`\nExample: `/remove AAPL`", parse_mode='Markdown')
+        await update.message.reply_text("Usage: `/remove <TICKER>`\nExample: `/remove RELIANCE`", parse_mode='Markdown')
         return
 
     ticker = context.args[0]

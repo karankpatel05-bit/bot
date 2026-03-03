@@ -1,11 +1,11 @@
 from predictor import predict_movement
 
-# Standard list of popular tech and index-related stocks to screen
+# Standard list of popular Indian (Nifty 50) stocks to screen
 SCREENER_LIST = [
-    "AAPL", "MSFT", "GOOGL", "AMZN", "META", 
-    "TSLA", "NVDA", "AMD", "NFLX", "INTC", 
-    "JPM", "BAC", "V", "MA", "DIS",
-    "JNJ", "PFE", "UNH", "PG", "KO"
+    "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS", 
+    "HUL.NS", "SBIN.NS", "BAJFINANCE.NS", "BHARTIARTL.NS", "KOTAKBANK.NS", 
+    "ITC.NS", "LT.NS", "AXISBANK.NS", "ASIANPAINT.NS", "MARUTI.NS",
+    "SUNPHARMA.NS", "TITAN.NS", "WIPRO.NS", "ULTRACEMCO.NS", "TVSMOTOR.NS"
 ]
 
 def run_screener() -> list:

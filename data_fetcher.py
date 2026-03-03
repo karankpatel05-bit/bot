@@ -27,6 +27,10 @@ def get_ticker_data(ticker_symbol: str):
     Fetches historical data, calculates RSI, MACD, EMAs, Bollinger Bands
     and gets recent news for the ticker.
     """
+    # Automatically append .NS for Indian stocks if no suffix is provided
+    if not ticker_symbol.endswith('.NS') and not ticker_symbol.endswith('.BO'):
+        ticker_symbol = f"{ticker_symbol}.NS"
+        
     ticker = yf.Ticker(ticker_symbol)
     
     # Get 6 months of historical data to calculate technicals reliably
