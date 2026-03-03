@@ -1,4 +1,5 @@
 import os
+import re
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
@@ -152,9 +153,58 @@ async def recommend_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(response_text, parse_mode='Markdown')
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle regular messages."""
-    text = update.message.text
-    await update.message.reply_text(f"I only understand commands. Try `/analyze {text.split()[0][:5]}` or `/help`.", parse_mode='Markdown')
+    """Handle regular messages using basic keyword/intent matching."""
+    text = update.message.text.lower()
+    
+    # 1. Intent: Portfolio
+    if any(word in text for word in ["portfolio", "holdings", "my stocks", "positions", "how am i doing"]):
+        await portfolio_command(update, context)
+        return
+        
+    # 2. Intent: Recommendations
+    if any(word in text for word in ["recommend", "suggest", "what to buy", "screener", "top stocks", "picks"]):
+        await recommend_command(update, context)
+        return
+        
+    # 3. Intent: Analyze a specific stock
+    # Look for a ticker symbol (typically uppercase words in the original text)
+    original_words = update.message.text.split()
+    tickers = []
+    
+    for w in original_words:
+        clean_w = re.sub(r'[^\w\s]', '', w)
+        # If it's all uppercase and at least 2 chars, it's likely a ticker
+        if clean_w.isupper() and len(clean_w) >= 2:
+            tickers.append(clean_w)
+            
+    # If no uppercase tickers found, check the words following certain keywords
+    if not tickers:
+        words = text.split()
+        keywords = ["analyze", "check", "predict", "about", "for", "buy", "sell", "is", "chart"]
+        for i, w in enumerate(words):
+            if w in keywords and i + 1 < len(words):
+                clean_target = re.sub(r'[^\w\s]', '', words[i+1]).upper()
+                # Exclude common stop words that might follow these keywords
+                if len(clean_target) > 1 and clean_target not in ["A", "THE", "THIS", "THAT", "MY", "SOME", "GOOD", "BAD"]:
+                    tickers.append(clean_target)
+                    break
+                    
+    if tickers:
+        # Mock context.args so analyze_command can process it
+        context.args = [tickers[0]]
+        await analyze_command(update, context)
+        return
+        
+    # Fallback
+    fallback_text = (
+        "I'm not exactly sure what you mean! 🤔\n\n"
+        "Try saying things like:\n"
+        "- *\"Analyze TCS\"*\n"
+        "- *\"How is RELIANCE looking?\"*\n"
+        "- *\"Show my portfolio\"*\n"
+        "- *\"Can you recommend some stocks?\"*"
+    )
+    await update.message.reply_text(fallback_text, parse_mode='Markdown')
 
 def main():
     """Start the bot."""
