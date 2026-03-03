@@ -1,0 +1,7 @@
+python-telegram-bot
+yfinance
+pandas
+ta
+transformers
+python-dotenv
+feedparser
